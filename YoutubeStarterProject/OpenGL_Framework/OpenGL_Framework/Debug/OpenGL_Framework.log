@@ -1,0 +1,4 @@
+﻿  Mesh.cpp
+c:\users\100669287\desktop\youtubestarterproject\opengl_framework\opengl_framework\mesh.cpp(31): warning C4101: 'inputString': unreferenced local variable
+  OpenGL_Framework.vcxproj -> C:\Users\100669287\Desktop\YoutubeStarterProject\OpenGL_Framework\Debug\OpenGL_Framework.exe
+  OpenGL_Framework.vcxproj -> C:\Users\100669287\Desktop\YoutubeStarterProject\OpenGL_Framework\Debug\OpenGL_Framework.pdb (Partial PDB)
