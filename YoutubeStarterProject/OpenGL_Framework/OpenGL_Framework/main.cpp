@@ -1,3 +1,4 @@
+#include<GL\glew.h>
 #include <windows.h>
 #include <iostream>
 #include "Game.h"
@@ -79,6 +80,8 @@ int main(int argc, char **argv)
 	glutInitWindowSize(WINDOW_WIDTH, WINDOW_HEIGHT);
 	glutInitDisplayMode(GLUT_RGBA | GLUT_DOUBLE);
 	glutCreateWindow("OpenGL Framework");
+
+	glewInit();
 
 	std::cout << "OpenGL version: " << glGetString(GL_VERSION) << std::endl;
 
