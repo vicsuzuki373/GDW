@@ -8,7 +8,8 @@ Game::~Game()
 {
 	delete updateTimer;
 
-	//...
+	PassThrough.UnLoad();
+	Monestary.Unload();
 }
 
 void Game::initializeGame()
@@ -24,7 +25,7 @@ void Game::initializeGame()
 		exit(0);
 	}
 
-	if (!monsestary.LoadFromFile("./Assets/Models/monestary.obj"))
+	if (!Monestary.LoadFromFile("./Assets/Models/Monkey.obj"))
 	{
 		std::cout << "Model failed to load\n";
 		system("pause");
@@ -45,7 +46,7 @@ void Game::update()
 	float deltaTime = updateTimer->getElapsedTimeSeconds();
 	TotalGameTime += deltaTime;
 
-	//...
+	MonestaryTransform.RotateY(deltaTime * 45.0f);
 }
 
 void Game::draw()
@@ -53,7 +54,16 @@ void Game::draw()
 	glClearColor(0, 0, 0, 0);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-	//...
+	PassThrough.Bind();
+	PassThrough.SendUniformMat4("uModel", MonestaryTransform.data, true);
+	PassThrough.SendUniformMat4("uView", CameraTransform.GetInverse().data, true);
+	PassThrough.SendUniformMat4("uProj", CameraProjection.data, true);
+
+	glBindVertexArray(Monestary.VAO);
+	glDrawArrays(GL_TRIANGLES, 0, Monestary.GetNumVertices());
+	glBindVertexArray(0);
+
+	PassThrough.UnBind();
 
 	glutSwapBuffers();
 }

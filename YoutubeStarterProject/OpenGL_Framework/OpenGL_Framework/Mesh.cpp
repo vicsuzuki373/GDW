@@ -129,7 +129,7 @@ bool Mesh::LoadFromFile(const std::string &file)
 			//This line contains face data
 			MeshFace temp;
 
-			std::sscanf(inputString, "f %u%u%u %u%u%u %u%u%u",
+			std::sscanf(inputString, "f %u/%u/%u %u/%u/%u %u/%u/%u",
 				&temp.vertices[0], &temp.texturesUVs[0], &temp.normals[0],
 				&temp.vertices[1], &temp.texturesUVs[1], &temp.normals[1],
 				&temp.vertices[2], &temp.texturesUVs[2], &temp.normals[2]);

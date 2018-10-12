@@ -34,7 +34,7 @@ public:
 	Timer *updateTimer = nullptr;
 	float TotalGameTime = 0.0f;
 
-	Mesh monsestary;
+	Mesh Monestary;
 	ShaderProgram PassThrough;
 
 	mat4 CameraTransform;
