@@ -1,10 +1,18 @@
 #pragma once
 #include <windows.h>
+
+#include "ShaderProgram.h"
+#include "Mesh.h"
+
 #include <GL/gl.h>
 #include <GL/glu.h>
 #include <GL/glut.h>
 
 #include "Timer.h"
+
+#define WINDOW_WIDTH			800
+#define WINDOW_HEIGHT			600
+#define FRAMES_PER_SECOND		60
 
 class Game
 {
@@ -23,8 +31,15 @@ public:
 	void mouseMoved(int x, int y);
 
 	/* Data Members */
-	Timer *updateTimer	= nullptr;
+	Timer *updateTimer = nullptr;
 	float TotalGameTime = 0.0f;
+
+	Mesh monsestary;
+	ShaderProgram PassThrough;
+
+	mat4 CameraTransform;
+	mat4 CameraProjection;
+	mat4 MonestaryTransform;
 
 private:
 

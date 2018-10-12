@@ -2,12 +2,7 @@
 #include <windows.h>
 #include <iostream>
 #include "Game.h"
-
-#define WINDOW_SCREEN_WIDTH		640
-#define WINDOW_SCREEN_HEIGHT	432
-#define WINDOW_WIDTH			800
-#define WINDOW_HEIGHT			432
-#define FRAMES_PER_SECOND		60
+#include <GL\freeglut.h>
 
 const int FRAME_DELAY_SPRITE = 1000 / FRAMES_PER_SECOND;
 
@@ -77,11 +72,18 @@ int main(int argc, char **argv)
 {
 	/* initialize the window and OpenGL properly */
 	glutInit(&argc, argv);
+	glutInitContextVersion(4, 2);
 	glutInitWindowSize(WINDOW_WIDTH, WINDOW_HEIGHT);
 	glutInitDisplayMode(GLUT_RGBA | GLUT_DOUBLE);
 	glutCreateWindow("OpenGL Framework");
 
-	glewInit();
+	glewExperimental = true;
+	if (glewInit() != GLEW_OK)
+	{
+		std::cout << "GLEW could not be initialized.\n";
+		system("pause");
+		return 0;
+	}
 
 	std::cout << "OpenGL version: " << glGetString(GL_VERSION) << std::endl;
 

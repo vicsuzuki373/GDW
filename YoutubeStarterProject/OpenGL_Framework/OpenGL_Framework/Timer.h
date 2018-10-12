@@ -14,16 +14,17 @@ class Timer
 public:
 	Timer()
 	{
-		previousTime = glutGet(GLUT_ELAPSED_TIME);
+		previousTime = static_cast<float>(glutGet(GLUT_ELAPSED_TIME));
 		this->tick();
 	}
 
 	~Timer();
 
+
 	// update the timer clock
 	float tick()
 	{
-		currentTime = glutGet(GLUT_ELAPSED_TIME);
+		currentTime = static_cast<float>(glutGet(GLUT_ELAPSED_TIME));
 		elapsedTime = currentTime - previousTime;
 		previousTime = currentTime;
 		return elapsedTime;

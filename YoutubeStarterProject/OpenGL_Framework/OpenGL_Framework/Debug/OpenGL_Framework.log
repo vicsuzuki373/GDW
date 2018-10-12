@@ -1,4 +1,42 @@
-﻿  Mesh.cpp
-c:\users\100669287\desktop\youtubestarterproject\opengl_framework\opengl_framework\mesh.cpp(31): warning C4101: 'inputString': unreferenced local variable
-  OpenGL_Framework.vcxproj -> C:\Users\100669287\Desktop\YoutubeStarterProject\OpenGL_Framework\Debug\OpenGL_Framework.exe
-  OpenGL_Framework.vcxproj -> C:\Users\100669287\Desktop\YoutubeStarterProject\OpenGL_Framework\Debug\OpenGL_Framework.pdb (Partial PDB)
+﻿  Game.cpp
+  main.cpp
+  Timer.cpp
+  Generating Code...
+main.obj : error LNK2019: unresolved external symbol __imp__glewInit@0 referenced in function _main
+main.obj : error LNK2001: unresolved external symbol __imp__glewExperimental
+Mesh.obj : error LNK2001: unresolved external symbol __imp____glewBindBuffer
+Mesh.obj : error LNK2001: unresolved external symbol __imp____glewBufferData
+Mesh.obj : error LNK2001: unresolved external symbol __imp____glewDeleteBuffers
+Mesh.obj : error LNK2001: unresolved external symbol __imp____glewGenBuffers
+Mesh.obj : error LNK2001: unresolved external symbol __imp____glewEnableVertexAttribArray
+Mesh.obj : error LNK2001: unresolved external symbol __imp____glewVertexAttribPointer
+Mesh.obj : error LNK2001: unresolved external symbol __imp____glewBindVertexArray
+Mesh.obj : error LNK2001: unresolved external symbol __imp____glewDeleteVertexArrays
+Mesh.obj : error LNK2001: unresolved external symbol __imp____glewGenVertexArrays
+ShaderProgram.obj : error LNK2001: unresolved external symbol __imp____glewAttachShader
+ShaderProgram.obj : error LNK2001: unresolved external symbol __imp____glewBindAttribLocation
+ShaderProgram.obj : error LNK2001: unresolved external symbol __imp____glewCompileShader
+ShaderProgram.obj : error LNK2001: unresolved external symbol __imp____glewCreateProgram
+ShaderProgram.obj : error LNK2001: unresolved external symbol __imp____glewCreateShader
+ShaderProgram.obj : error LNK2001: unresolved external symbol __imp____glewDeleteProgram
+ShaderProgram.obj : error LNK2001: unresolved external symbol __imp____glewDeleteShader
+ShaderProgram.obj : error LNK2001: unresolved external symbol __imp____glewDetachShader
+ShaderProgram.obj : error LNK2001: unresolved external symbol __imp____glewGetAttribLocation
+ShaderProgram.obj : error LNK2001: unresolved external symbol __imp____glewGetProgramInfoLog
+ShaderProgram.obj : error LNK2001: unresolved external symbol __imp____glewGetProgramiv
+ShaderProgram.obj : error LNK2001: unresolved external symbol __imp____glewGetShaderInfoLog
+ShaderProgram.obj : error LNK2001: unresolved external symbol __imp____glewGetShaderiv
+ShaderProgram.obj : error LNK2001: unresolved external symbol __imp____glewGetUniformLocation
+ShaderProgram.obj : error LNK2001: unresolved external symbol __imp____glewLinkProgram
+ShaderProgram.obj : error LNK2001: unresolved external symbol __imp____glewShaderSource
+ShaderProgram.obj : error LNK2001: unresolved external symbol __imp____glewUniform1f
+ShaderProgram.obj : error LNK2001: unresolved external symbol __imp____glewUniform1i
+ShaderProgram.obj : error LNK2001: unresolved external symbol __imp____glewUniform2f
+ShaderProgram.obj : error LNK2001: unresolved external symbol __imp____glewUniform3f
+ShaderProgram.obj : error LNK2001: unresolved external symbol __imp____glewUniform4f
+ShaderProgram.obj : error LNK2001: unresolved external symbol __imp____glewUniformMatrix3fv
+ShaderProgram.obj : error LNK2001: unresolved external symbol __imp____glewUniformMatrix4fv
+ShaderProgram.obj : error LNK2001: unresolved external symbol __imp____glewUseProgram
+ShaderProgram.obj : error LNK2001: unresolved external symbol __imp____glewUniform1ui
+C:\Users\100662523\Desktop\Game Design\GDW\YoutubeStarterProject\OpenGL_Framework\OpenGL_Framework\\lib\\glew32.lib : warning LNK4272: library machine type 'x64' conflicts with target machine type 'x86'
+C:\Users\100662523\Desktop\Game Design\GDW\YoutubeStarterProject\OpenGL_Framework\Debug\OpenGL_Framework.exe : fatal error LNK1120: 36 unresolved externals

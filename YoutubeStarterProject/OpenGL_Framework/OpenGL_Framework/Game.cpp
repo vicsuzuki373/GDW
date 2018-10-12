@@ -15,6 +15,25 @@ void Game::initializeGame()
 {
 	updateTimer = new Timer();
 
+	glEnable(GL_DEPTH_TEST);
+
+	if (!PassThrough.Load("./Assets/Shaders/PassThrough.vert", "./Assets/Shaders/PassThrough.frag"))
+	{
+		std::cout << "Shaders failed to initialize\n";
+		system("pause");
+		exit(0);
+	}
+
+	if (!monsestary.LoadFromFile("./Assets/Models/monestary.obj"))
+	{
+		std::cout << "Model failed to load\n";
+		system("pause");
+		exit(0);
+	}
+
+	CameraTransform.Translate(vec3(0.0f, 0.0f, 5.0f));
+	CameraProjection.PerspectiveProjection(60.0f, (float)WINDOW_WIDTH / (float)WINDOW_HEIGHT, 1.0f, 10000.0f);
+
 	//...
 }
 
