@@ -171,13 +171,13 @@ void ShaderProgram::SendUniform(const std::string & name, const vec4 & vector)
 void ShaderProgram::SendUniformMat3(const std::string & name, float * matrix, bool transpose)
 {
 	GLint location = GetUniformLocation(name);
-	glUniformMatrix3fv(location, 1, transpose, matrix);
+	glUniformMatrix3fv(location, 1, !transpose, matrix);
 }
 
 void ShaderProgram::SendUniformMat4(const std::string & name, float * matrix, bool transpose)
 {
 	GLint location = GetUniformLocation(name);
-	glUniformMatrix4fv(location, 1, transpose, matrix);
+	glUniformMatrix4fv(location, 1, !transpose, matrix);
 }
 
 std::string ShaderProgram::ReadFile(const std::string & fileName) const
