@@ -42,5 +42,10 @@ public:
 	mat4 MonestaryTransform;
 
 private:
-
+	bool Wpressed = false;
+	bool Apressed = false;
+	bool Spressed = false;
+	bool Dpressed = false;
+	bool Epressed = false;
+	float acceleration = 0.0f;
 };

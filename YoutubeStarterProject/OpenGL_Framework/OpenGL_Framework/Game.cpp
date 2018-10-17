@@ -25,7 +25,7 @@ void Game::initializeGame()
 		exit(0);
 	}
 
-	if (!Monestary.LoadFromFile("./Assets/Models/Stage.obj"))
+	if (!Monestary.LoadFromFile("./Assets/Models/monestary.obj"))
 	{
 		std::cout << "Model failed to load\n";
 		system("pause");
@@ -46,7 +46,23 @@ void Game::update()
 	float deltaTime = updateTimer->getElapsedTimeSeconds();
 	TotalGameTime += deltaTime;
 
-	MonestaryTransform.RotateY(deltaTime * 45.0f);
+	//MonestaryTransform.RotateY(deltaTime * 45.0f);
+	if (Wpressed == true){
+		MonestaryTransform.Translate(vec3(0.0f, 0.01f, 0.0f));
+	}
+	if (Apressed == true) {
+		MonestaryTransform.Translate(vec3(-0.01f, 0.0f, 0.0f));
+	}
+	if (Spressed == true) {
+		MonestaryTransform.Translate(vec3(0.0f, -0.01f, 0.0f));
+	}
+	if (Dpressed == true) {
+		MonestaryTransform.Translate(vec3(0.01f, 0.0f, 0.0f));
+	}
+	if (Epressed == true) {
+		for (int i=0; i<=360; i++)
+		MonestaryTransform.RotateY(1.0f);
+		}
 }
 
 void Game::draw()
@@ -73,6 +89,21 @@ void Game::keyboardDown(unsigned char key, int mouseX, int mouseY)
 	switch(key)
 	{
 	case 27: // the escape key
+	case 'w':
+		Wpressed = true;
+		break;
+	case 'a':
+		Apressed = true;
+		break;
+	case 's':
+		Spressed = true;
+		break;
+	case 'd':
+		Dpressed = true;
+		break;
+	case 'e':
+		Epressed = true;
+		break;
 	case 'q': // the 'q' key
 		exit(1);
 		break;
@@ -85,6 +116,22 @@ void Game::keyboardUp(unsigned char key, int mouseX, int mouseY)
 	{
 	case 32: // the space bar
 		break;
+	case 'w':
+		Wpressed = false;
+		break;
+	case 'a':
+		Apressed = false;
+		break;
+	case 's':
+		Spressed = false;
+		break;
+	case 'd':
+		Dpressed = false;
+		break;
+	case 'e':
+		Epressed = false;
+		break;
+		
 	case 27: // the escape key
 	case 'q': // the 'q' key
 		exit(1);
