@@ -3,6 +3,7 @@
 
 #include "Mesh.h"
 #include "ShaderProgram.h"
+#include "Texture.h"
 
 #include <GL/glew.h>
 #include <GL/gl.h>
@@ -42,6 +43,8 @@ public:
 	Mesh Stage;
 
 	ShaderProgram PassThrough;
+
+	Texture GrassTexture;
 
 	mat4 CameraTransform;
 	mat4 CameraProjection;
