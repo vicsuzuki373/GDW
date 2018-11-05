@@ -1,5 +1,5 @@
 #include "Texture.h"
-#include"SOIL\SOIL.h"
+#include "SOIL/SOIL.h"
 
 #include <iostream>
 
