@@ -14,7 +14,6 @@
 #include "Timer.h"
 #include "Camera.h"
 #include "Transform.h"
-#include "Lerp.h"
 
 #define WINDOW_WIDTH			800
 #define WINDOW_HEIGHT			600
