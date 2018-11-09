@@ -74,7 +74,13 @@ void Game::update()
 
 	//KnightTransform.RotateY(deltaTime * 45.0f);
 	KnightTransform.Translate(vec3(xMoveKnight, yMoveKnight, 0.0f));
-
+	if (KnightTransform.GetTranslation().y > 0.33f) {
+		yMoveKnight += -0.05f;
+	}
+	if (KnightTransform.GetTranslation().y < 0.0f) {
+		yMoveKnight = 0.0f;
+		KnightTransform.SetTranslation((vec3(KnightTransform.GetTranslation().x, 0.0f, 0.0f)));
+	}
 	// ...
 }
 
@@ -92,8 +98,8 @@ void Game::draw()
 	PassThrough.SendUniform("uTex", 0);
 	PassThrough.SendUniform("LightPosition", CameraTransform.GetInverse() * vec4(4.0f, 0.0f, 0.0f, 1.0f));
 	PassThrough.SendUniform("LightAmbient", vec3(0.5f, 0.5f, 0.5f));
-	PassThrough.SendUniform("LightDiffuse", vec3(1.0f, 1.0f, 1.0f));
-	PassThrough.SendUniform("LightSpecular", vec3(0.8f, 0.1f, 0.1f));
+	PassThrough.SendUniform("LightDiffuse", vec3(0.7f, 0.7f, 0.7f));
+	PassThrough.SendUniform("LightSpecular", vec3(0.7f, 0.7f, 0.7f));
 	PassThrough.SendUniform("LightSpecularExponent", 50.0f);
 	PassThrough.SendUniform("Attenuation_Constant", 1.0f);
 	PassThrough.SendUniform("Attenuation_Linear", 0.1f);
@@ -129,10 +135,33 @@ void Game::keyboardDown(unsigned char key, int mouseX, int mouseY)
 {
 	if (key == 27) // Escape
 		exit(1);
-	if (key == 'a') // A
-		xMoveKnight += -0.01f;
-	if (key == 'd') // D
-		xMoveKnight += 0.01f;
+	if (key == 'a' || key == 'A') { // A
+		xMoveKnight += -0.1f;
+		if (xMoveKnight < -0.5f) {
+			xMoveKnight = -0.5f;
+		}
+		if (KnightTransform.GetTranslation().x < -15.5) {
+			xMoveKnight = 0.0f;
+		}
+	}
+	if (key == 'd' || key == 'D') // D
+		xMoveKnight += 0.1f;
+	if (xMoveKnight > 0.5f) {
+		xMoveKnight = 0.5f;
+	}
+	if (KnightTransform.GetTranslation().x >= 12.5) {
+		xMoveKnight = -0.01f;
+	}
+	if (key == 'w' || key == 'W') {
+		if (KnightTransform.GetTranslation().y <= 0.5)// D
+			yMoveKnight += 0.8f;
+	}
+	if (key == 'd' && key == 'w') {
+		if (KnightTransform.GetTranslation().y <= 0.5)// D
+			yMoveKnight += 0.8f;
+		xMoveKnight += 0.1f;
+	}
+
 }
 
 void Game::keyboardUp(unsigned char key, int mouseX, int mouseY)
@@ -162,7 +191,7 @@ void Game::keyboardUp(unsigned char key, int mouseX, int mouseY)
 
 	// Resets movement
 	xMoveKnight = 0.0f;
-	yMoveKnight = 0.0f;
+	yMoveKnight += -0.05f;
 }
 
 void Game::mouseClicked(int button, int state, int x, int y)

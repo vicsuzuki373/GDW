@@ -55,6 +55,7 @@ public:
 	float xMoveKnight = 0.0f;
 	float yMoveKnight = 0.0f;
 
+
 	/* Perspective Change */
 	int current = 0;
 
