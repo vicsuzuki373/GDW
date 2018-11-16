@@ -22,7 +22,6 @@ void Game::initializeGame()
 	updateTimer = new Timer();
 
 	glEnable(GL_DEPTH_TEST);
-	glEnable(GL_TEXTURE_2D);
 
 	if (!PassThrough.Load("./Assets/Shaders/PassThrough.vert", "./Assets/Shaders/PassThrough.frag"))
 	{

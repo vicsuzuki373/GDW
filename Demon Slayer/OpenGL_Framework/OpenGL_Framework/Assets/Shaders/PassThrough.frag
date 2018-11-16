@@ -15,7 +15,7 @@ uniform float Attenuation_Quadratic;
 
 uniform sampler2D uTex;
 
-out vec2 texcoord;
+in vec2 texcoord;
 in vec3 norm;
 in vec3 pos;
 
