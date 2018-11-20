@@ -15,8 +15,8 @@
 #include "Camera.h"
 #include "Transform.h"
 
-#define WINDOW_WIDTH			800
-#define WINDOW_HEIGHT			600
+#define WINDOW_WIDTH			1600
+#define WINDOW_HEIGHT			900
 #define FRAMES_PER_SECOND		60
 
 class Game
@@ -41,23 +41,35 @@ public:
 
 	Mesh Knight;
 	Mesh Stage;
+	Mesh Demon;
 
 	ShaderProgram PassThrough;
 
-	Texture GrassTexture;
+	Texture Grey;
+	Texture Blue;
+	Texture Red;
 
 	mat4 CameraTransform;
 	mat4 CameraProjection;
 	mat4 KnightTransform;
+	mat4 DemonTransform;
 	mat4 StageTransform;
 
-	/* Axes */
-	float xMoveKnight = 0.0f;
-	float yMoveKnight = 0.0f;
+	/* Movement */
+	float MoveKnightX = 0.0f;
+	float MoveKnightY= 0.0f;
 
 
 	/* Perspective Change */
 	int current = 0;
+
+
+	//Keys
+	bool A = false;
+	bool S = false;
+	bool D = false;
+	bool W = false;
+	bool Space = false;
 
 private:
 	unsigned int VBO1 = GL_NONE;
@@ -69,5 +81,4 @@ private:
 	unsigned int fragShader = GL_NONE;
 
 	Camera camera;
-	Transform cube;
 };

@@ -13,7 +13,11 @@ Game::~Game()
 
 	PassThrough.UnLoad();
 	Knight.Unload();
-	GrassTexture.Unload();
+	Stage.Unload();
+	Demon.Unload();
+	Grey.Unload();
+	Blue.Unload();
+	Red.Unload();
 	//...
 }
 
@@ -23,6 +27,7 @@ void Game::initializeGame()
 
 	glEnable(GL_DEPTH_TEST);
 
+	//Shaders
 	if (!PassThrough.Load("./Assets/Shaders/PassThrough.vert", "./Assets/Shaders/PassThrough.frag"))
 	{
 		std::cout << "Shaders failed to initialize.\n";
@@ -30,21 +35,41 @@ void Game::initializeGame()
 		exit(0);
 	}
 
+	//Objects
 	if (!Knight.LoadFromFile("./Assets/Models/Knight.obj"))
 	{
 		std::cout << "Model failed to load\n";
 		system("pause");
 		exit(0);
 	}
-
 	if (!Stage.LoadFromFile("./Assets/Models/Stage.obj"))
 	{
 		std::cout << "Model failed to load\n";
 		system("pause");
 		exit(0);
 	}
+	if (!Demon.LoadFromFile("./Assets/Models/Demon.obj"))
+	{
+		std::cout << "Model failed to load\n";
+		system("pause");
+		exit(0);
+	}
 
-	if (!GrassTexture.Load("./Assets/Textures/Grass.png"))
+
+	//Textures
+	if (!Grey.Load("./Assets/Textures/Gray.png"))
+	{
+		std::cout << "Texture failed to load\n";
+		system("pause");
+		exit(0);
+	}
+	if (!Blue.Load("./Assets/Textures/Blue.png"))
+	{
+		std::cout << "Texture failed to load\n";
+		system("pause");
+		exit(0);
+	}
+	if (!Red.Load("./Assets/Textures/Red.png"))
 	{
 		std::cout << "Texture failed to load\n";
 		system("pause");
@@ -53,9 +78,14 @@ void Game::initializeGame()
 
 	CameraTransform.Translate(vec3(0.0f, 5.0f, 20.0f));
 	CameraProjection = mat4::PerspectiveProjection(60.0f, (float)WINDOW_WIDTH / (float)WINDOW_HEIGHT, 1.0f, 10000.0f);
+
 	StageTransform.Translate(vec3(0.0f, 0.0f, -15.0f));
-	KnightTransform.RotateY(45.0f);
+
+	KnightTransform.RotateY(80.0f);
 	KnightTransform.Translate(vec3(-7.5f, 0.0f, 0.0f));
+
+	DemonTransform.RotateY(-80.0f);
+	DemonTransform.Translate(vec3(10.0f, 0.0f, 0.0f));
 }
 
 void Game::update()
@@ -66,26 +96,44 @@ void Game::update()
 	float deltaTime = updateTimer->getElapsedTimeSeconds();
 	TotalGameTime += deltaTime;
 
-	//cube.setRotationAngleY(TotalGameTime * 15.0f);
-
-	//camera.update(deltaTime);
-	//cube.update(deltaTime);
-
-	//KnightTransform.RotateY(deltaTime * 45.0f);
-	KnightTransform.Translate(vec3(xMoveKnight, yMoveKnight, 0.0f));
-	if (KnightTransform.GetTranslation().y > 0.33f) {
-		yMoveKnight += -0.05f;
+	//Gravity
+	MoveKnightY -= 0.05f;
+	if (KnightTransform.GetTranslation().y < 0)
+	{
+		MoveKnightY = 0.0f;
 	}
-	if (KnightTransform.GetTranslation().y < 0.0f) {
-		yMoveKnight = 0.0f;
-		KnightTransform.SetTranslation((vec3(KnightTransform.GetTranslation().x, 0.0f, 0.0f)));
+
+	//Move Left
+	if (A && MoveKnightX > -0.3f)
+		MoveKnightX -= 0.01f;
+	else if (A == false && MoveKnightX < 0) //Slow down
+	{
+		MoveKnightX += 0.02f;
+		if (MoveKnightX > 0) //Prevents movement after releasing the key
+			MoveKnightX = 0;
 	}
-	// ...
+
+	//Move Right
+	if (D && MoveKnightX < 0.3f)
+		MoveKnightX += 0.01f;
+	else if (D == false && MoveKnightX > 0) //Slow down
+	{
+		MoveKnightX -= 0.02f;
+		if (MoveKnightX < 0) //Prevents movement after releasing the key
+			MoveKnightX = 0;
+	}
+
+	//Jump
+	if (Space && MoveKnightY == 0.0f)
+		MoveKnightY = 0.6f;
+
+
+	KnightTransform.Translate(vec3(MoveKnightX, MoveKnightY, 0.0f));
 }
 
 void Game::draw()
 {
-	glClearColor(0, 0, 0, 0);
+	glClearColor(0.2f, 0, 0, 0);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 	PassThrough.Bind();
@@ -104,26 +152,28 @@ void Game::draw()
 	PassThrough.SendUniform("Attenuation_Linear", 0.1f);
 	PassThrough.SendUniform("Attenuation_Quadratic", 0.01f);
 
-	//bind grass texture (to only monestary bc we unbind it right after
-	GrassTexture.Bind();
 
+	Grey.Bind();
 	glBindVertexArray(Stage.VAO);
 	glDrawArrays(GL_TRIANGLES, 0, Stage.GetNumVertices());
 	glBindVertexArray(0);
+	Grey.Unbind();
 
-	GrassTexture.Unbind();
-	PassThrough.unBind();
 
-	PassThrough.Bind();
 	PassThrough.SendUniformMat4("uModel", KnightTransform.data, true);
-	PassThrough.SendUniformMat4("uView", CameraTransform.GetInverse().data, true);
-	PassThrough.SendUniformMat4("uProj", CameraProjection.data, true);
-
-
-
+	Blue.Bind();
 	glBindVertexArray(Knight.VAO);
 	glDrawArrays(GL_TRIANGLES, 0, Knight.GetNumVertices());
 	glBindVertexArray(0);
+	Blue.Unbind();
+
+
+	PassThrough.SendUniformMat4("uModel", DemonTransform.data, true);
+	Red.Bind();
+	glBindVertexArray(Demon.VAO);
+	glDrawArrays(GL_TRIANGLES, 0, Demon.GetNumVertices());
+	glBindVertexArray(0);
+	Red.Unbind();
 
 	PassThrough.unBind();
 
@@ -132,65 +182,43 @@ void Game::draw()
 
 void Game::keyboardDown(unsigned char key, int mouseX, int mouseY)
 {
-	if (key == 27) // Escape
+	if (key == 27)
 		exit(1);
-	if (key == 'a' || key == 'A') { // A
-		xMoveKnight += -0.1f;
-		if (xMoveKnight < -0.5f) {
-			xMoveKnight = -0.5f;
-		}
-		if (KnightTransform.GetTranslation().x < -15.5) {
-			xMoveKnight = 0.0f;
-		}
-	}
-	if (key == 'd' || key == 'D') // D
-		xMoveKnight += 0.1f;
-	if (xMoveKnight > 0.5f) {
-		xMoveKnight = 0.5f;
-	}
-	if (KnightTransform.GetTranslation().x >= 12.5) {
-		xMoveKnight = -0.01f;
-	}
-	if (key == 'w' || key == 'W') {
-		if (KnightTransform.GetTranslation().y <= 0.5)// D
-			yMoveKnight += 0.8f;
-	}
-	if (key == 'd' && key == 'w') {
-		if (KnightTransform.GetTranslation().y <= 0.5)// D
-			yMoveKnight += 0.8f;
-		xMoveKnight += 0.1f;
-	}
+
+	if (key == 'a' || key == 'A') //A
+		A = true;
+
+	if (key == 'd' || key == 'D') //D
+		D = true;
+
+	if (key == 'w' || key == 'W') //W
+		W = true;
+
+	if (key == 's' || key == 'S') //S
+		S = true;
+
+	if (key == ' ') //Space bar
+		Space = true;
 
 }
 
 void Game::keyboardUp(unsigned char key, int mouseX, int mouseY)
 {
-		//case 32: // the space bar
-		//	break;
-		//case 27: // the escape key
-		//case 'q': // the 'q' key
-		//	exit(1);
-		//	break;
+	if (key == 'a' || key == 'A') //A
+		A = false;
 
-	// Switches camera perspective when spacebar is pressed
-	// Orhtographic is currently broken
-		//if (key == 'v')
-		//{
-		//	if (current == 0)
-		//	{
-		//		CameraProjection = mat4::OrthographicProjection(-3.0f, 3.0f, 3.0f, -3.0f, 1.0f, 10000.0f);
-		//		current = 1;
-		//	}
-		//	else if (current == 1)
-		//	{
-		//		CameraProjection = mat4::PerspectiveProjection(60.0f, (float)WINDOW_WIDTH / (float)WINDOW_HEIGHT, 1.0f, 10000.0f);
-		//		current = 0;
-		//	}
-		//}
+	if (key == 'd' || key == 'D') //D
+		D = false;
 
-	// Resets movement
-	xMoveKnight = 0.0f;
-	yMoveKnight += -0.05f;
+	if (key == 'w' || key == 'W') //W
+		W = false;
+
+	if (key == 's' || key == 'S') //S
+		S = false;
+
+	if (key == ' ') //Space bar
+		Space = false;
+
 }
 
 void Game::mouseClicked(int button, int state, int x, int y)
