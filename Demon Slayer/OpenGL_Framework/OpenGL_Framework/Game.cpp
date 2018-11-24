@@ -54,7 +54,12 @@ void Game::initializeGame()
 		system("pause");
 		exit(0);
 	}
-
+	if (!Hitbox.LoadFromFile("./Assets/Models/hitbox.obj"))
+	{
+		std::cout << "Model failed to load\n";
+		system("pause");
+		exit(0);
+	}
 
 	//Textures
 	if (!Grey.Load("./Assets/Textures/Gray.png"))
@@ -86,6 +91,8 @@ void Game::initializeGame()
 
 	DemonTransform.RotateY(-80.0f);
 	DemonTransform.Translate(vec3(10.0f, 0.0f, 0.0f));
+
+	HitBoxTransform.Translate(vec3(-999.9f, -999.9f, 0));
 }
 
 void Game::update()
@@ -98,9 +105,9 @@ void Game::update()
 
 	//Gravity
 	MoveKnightY -= 0.05f;
-	if (KnightTransform.GetTranslation().y < 0)
+	if (KnightTransform.GetTranslation().y < 0.0f)
 	{
-		MoveKnightY = 0.0f;
+			MoveKnightY = 0.0f;
 	}
 
 	//Move Left
@@ -123,12 +130,22 @@ void Game::update()
 			MoveKnightX = 0;
 	}
 
+	if (L == true) {
+		HitBoxTransform.SetTranslation(vec3(KnightTransform.GetTranslation().x + 2.0f, KnightTransform.GetTranslation().y + 2.0f, 0.0f));
+	}
+	else if (L == false) {
+		HitBoxTransform.SetTranslation(vec3(-999.9f, -999.9f, 0.0f));
+
+	}
+
 	//Jump
 	if (Space && MoveKnightY == 0.0f)
 		MoveKnightY = 0.6f;
 
 
+
 	KnightTransform.Translate(vec3(MoveKnightX, MoveKnightY, 0.0f));
+	HitBoxTransform.Translate(vec3(MoveKnightX, MoveKnightY, 0.0f));
 }
 
 void Game::draw()
@@ -175,6 +192,13 @@ void Game::draw()
 	glBindVertexArray(0);
 	Red.Unbind();
 
+	PassThrough.SendUniformMat4("uModel", HitBoxTransform.data, true);
+	Red.Bind();
+	glBindVertexArray(Hitbox.VAO);
+	glDrawArrays(GL_TRIANGLES, 0, Demon.GetNumVertices());
+	glBindVertexArray(0);
+	Red.Unbind();
+
 	PassThrough.unBind();
 
 	glutSwapBuffers();
@@ -199,6 +223,8 @@ void Game::keyboardDown(unsigned char key, int mouseX, int mouseY)
 
 	if (key == ' ') //Space bar
 		Space = true;
+	if (key == 'l' || key == 'L')
+		L = true;
 
 }
 
@@ -218,7 +244,8 @@ void Game::keyboardUp(unsigned char key, int mouseX, int mouseY)
 
 	if (key == ' ') //Space bar
 		Space = false;
-
+	if (key == 'l' || key == 'L')
+		L = false;
 }
 
 void Game::mouseClicked(int button, int state, int x, int y)

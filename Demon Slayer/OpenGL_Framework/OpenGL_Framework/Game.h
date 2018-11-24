@@ -42,6 +42,9 @@ public:
 	Mesh Knight;
 	Mesh Stage;
 	Mesh Demon;
+	Mesh Hitbox;
+	Mesh Rubble;
+	
 
 	ShaderProgram PassThrough;
 
@@ -54,6 +57,7 @@ public:
 	mat4 KnightTransform;
 	mat4 DemonTransform;
 	mat4 StageTransform;
+	mat4 HitBoxTransform;
 
 	/* Movement */
 	float MoveKnightX = 0.0f;
@@ -69,7 +73,9 @@ public:
 	bool S = false;
 	bool D = false;
 	bool W = false;
+	bool L = false;
 	bool Space = false;
+	bool isOnGround;
 
 private:
 	unsigned int VBO1 = GL_NONE;
