@@ -170,7 +170,7 @@ int main(int argc, char **argv)
 	glutInitContextVersion(4, 2);
 	glutInitContextFlags(GLUT_CORE_PROFILE);
 	glutInitWindowSize(WINDOW_WIDTH, WINDOW_HEIGHT);
-	glutInitDisplayMode(GLUT_RGBA | GLUT_DOUBLE);
+	glutInitDisplayMode(GLUT_RGBA | GLUT_DOUBLE | GLUT_MULTISAMPLE);
 	glutCreateWindow("OpenGL Framework");
 
 	glewExperimental = true;

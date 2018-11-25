@@ -60,6 +60,20 @@ Mesh::~Mesh()
 // Load a mesh, and send it to OpenGL
 bool Mesh::LoadFromFile(const std::string &file)
 {
+	if (Frame == 0) {
+		VBO_Vertices = new GLuint[MaxFrames];
+		VBO_UVs = new GLuint[MaxFrames];
+		VBO_Normals = new GLuint[MaxFrames];
+
+		glGenVertexArrays(1, &VAO);
+		glBindVertexArray(VAO);
+	}
+
+	glGenBuffers(1, &VBO_Vertices[Frame]);
+	glGenBuffers(1, &VBO_UVs[Frame]);
+	glGenBuffers(1, &VBO_Normals[Frame]);
+
+
 	std::ifstream input;
 	input.open(file);
 
@@ -154,32 +168,25 @@ bool Mesh::LoadFromFile(const std::string &file)
 	_NumVertices = _NumFaces * 3;
 
 	// Send data to OpenGL
-	glGenVertexArrays(1, &VAO);
-	glGenBuffers(1, &VBO_Vertices);
-	glGenBuffers(1, &VBO_UVs);
-	glGenBuffers(1, &VBO_Normals);
+	unsigned int indexOffset = Frame * 3;
 
-	glBindVertexArray(VAO);
+	glEnableVertexAttribArray(0 + indexOffset); // Vertex
+	glEnableVertexAttribArray(1 + indexOffset); // UVs
+	glEnableVertexAttribArray(2 + indexOffset); // Normals
 
-	glEnableVertexAttribArray(0); // Vertex
-	glEnableVertexAttribArray(1); // UVs
-	glEnableVertexAttribArray(2); // Normals
-
-	glBindBuffer(GL_ARRAY_BUFFER, VBO_Vertices);
+	glBindBuffer(GL_ARRAY_BUFFER, VBO_Vertices[Frame]);
 	glBufferData(GL_ARRAY_BUFFER, sizeof(float) * unPackedVertexData.size(), &unPackedVertexData[0], GL_STATIC_DRAW);
-	glVertexAttribPointer((GLuint)0, 3, GL_FLOAT, GL_FALSE, sizeof(float) * 3, BUFFER_OFFSET(0));
+	glVertexAttribPointer((GLuint)0 + indexOffset, 3, GL_FLOAT, GL_FALSE, sizeof(float) * 3, BUFFER_OFFSET(0));
 
-	glBindBuffer(GL_ARRAY_BUFFER, VBO_UVs);
+	glBindBuffer(GL_ARRAY_BUFFER, VBO_UVs[Frame]);
 	glBufferData(GL_ARRAY_BUFFER, sizeof(float) * unPackedTextureData.size(), &unPackedTextureData[0], GL_STATIC_DRAW);
-	glVertexAttribPointer((GLuint)1, 2, GL_FLOAT, GL_FALSE, sizeof(float) * 2, BUFFER_OFFSET(0));
+	glVertexAttribPointer((GLuint)1 + indexOffset, 2, GL_FLOAT, GL_FALSE, sizeof(float) * 2, BUFFER_OFFSET(0));
 
-	glBindBuffer(GL_ARRAY_BUFFER, VBO_Normals);
+	glBindBuffer(GL_ARRAY_BUFFER, VBO_Normals[Frame]);
 	glBufferData(GL_ARRAY_BUFFER, sizeof(float) * unPackedNormalData.size(), &unPackedNormalData[0], GL_STATIC_DRAW);
-	glVertexAttribPointer((GLuint)2, 3, GL_FLOAT, GL_FALSE, sizeof(float) * 3, BUFFER_OFFSET(0));
+	glVertexAttribPointer((GLuint)2 + indexOffset, 3, GL_FLOAT, GL_FALSE, sizeof(float) * 3, BUFFER_OFFSET(0));
 
 	// Cleanup
-	glBindBuffer(GL_ARRAY_BUFFER, 0);
-	glBindVertexArray(0);
 
 	vertexData.clear();
 	textureData.clear();
@@ -189,21 +196,31 @@ bool Mesh::LoadFromFile(const std::string &file)
 	unPackedTextureData.clear();
 	unPackedNormalData.clear();
 
+	Frame++;
+	if (Frame == MaxFrames) {
+		glBindBuffer(GL_ARRAY_BUFFER, 0);
+		glBindVertexArray(0);
+	}
+
 	return true;
 }
 
 // Release data from OpenGL (VRAM)
 void Mesh::Unload()
 {
-	glDeleteBuffers(1, &VBO_Normals);
-	glDeleteBuffers(1, &VBO_UVs);
-	glDeleteBuffers(1, &VBO_Vertices);
+	for (unsigned int i = 0; i < MaxFrames; ++i)
+	{
+		glDeleteBuffers(1, &VBO_Normals[i]);
+		glDeleteBuffers(1, &VBO_UVs[i]);
+		glDeleteBuffers(1, &VBO_Vertices[i]);
+	}
 	glDeleteVertexArrays(1, &VAO);
 
-	VBO_Normals = 0;
-	VBO_UVs = 0;
-	VBO_Vertices = 0;
+	VBO_Normals = nullptr;
+	VBO_UVs = nullptr;
+	VBO_Vertices = nullptr;
 	VAO = 0;
+	Frame = 0;
 
 	_NumFaces = 0;
 	_NumVertices = 0;
@@ -217,4 +234,19 @@ unsigned int Mesh::GetNumFaces() const
 unsigned int Mesh::GetNumVertices() const
 {
 	return _NumVertices;
+}
+
+void Mesh::bind() const
+{
+	glBindVertexArray(VAO);
+}
+
+void Mesh::unbind()
+{
+	glBindVertexArray(0);
+}
+
+void Mesh::draw() const
+{
+	glDrawArrays(GL_TRIANGLES, 0, _NumVertices);
 }

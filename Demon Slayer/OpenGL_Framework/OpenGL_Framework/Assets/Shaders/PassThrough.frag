@@ -3,15 +3,15 @@
 uniform vec4 LightPosition;
 
 //color
-uniform vec3 LightAmbient;
-uniform vec3 LightDiffuse;
-uniform vec3 LightSpecular;
+uniform vec3 LightAmbient = vec3(0.5f, 0.5f, 0.5f);
+uniform vec3 LightDiffuse = vec3(0.7f, 0.7f, 0.7f);
+uniform vec3 LightSpecular = vec3(0.7f, 0.7f, 0.7f);
 
 //scalars
-uniform float LightSpecularExponent;
-uniform float Attenuation_Constant;
-uniform float Attenuation_Linear;
-uniform float Attenuation_Quadratic;
+uniform float LightSpecularExponent = 50.0f;
+uniform float Attenuation_Constant = 1.0f;
+uniform float Attenuation_Linear = 0.1f;
+uniform float Attenuation_Quadratic = 0.01f;
 
 uniform sampler2D uTex;
 

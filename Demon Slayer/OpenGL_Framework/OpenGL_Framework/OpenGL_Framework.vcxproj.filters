@@ -68,5 +68,8 @@
     <None Include="Assets\Shaders\PassThrough.vert">
       <Filter>Resource Files</Filter>
     </None>
+    <None Include="Assets\Shaders\AnimateShader.vert">
+      <Filter>Resource Files</Filter>
+    </None>
   </ItemGroup>
 </Project>

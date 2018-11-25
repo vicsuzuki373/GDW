@@ -44,9 +44,11 @@ public:
 	Mesh Demon;
 	Mesh Hitbox;
 	Mesh Rubble;
-	
+
+	Mesh AnimTest;
 
 	ShaderProgram PassThrough;
+	ShaderProgram Animation;
 
 	Texture Grey;
 	Texture Blue;
@@ -58,14 +60,16 @@ public:
 	mat4 DemonTransform;
 	mat4 StageTransform;
 	mat4 HitBoxTransform;
+	mat4 AnimTestTransform;
 
 	/* Movement */
 	float MoveKnightX = 0.0f;
 	float MoveKnightY= 0.0f;
 
 
-	/* Perspective Change */
-	int current = 0;
+	
+	int index = 0;
+	float interp = 0.0f;
 
 
 	//Keys

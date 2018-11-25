@@ -12,9 +12,14 @@ Game::~Game()
 	delete updateTimer;
 
 	PassThrough.UnLoad();
+	Animation.UnLoad();
+
 	Knight.Unload();
 	Stage.Unload();
 	Demon.Unload();
+	Hitbox.Unload();
+	AnimTest.Unload();
+
 	Grey.Unload();
 	Blue.Unload();
 	Red.Unload();
@@ -34,27 +39,63 @@ void Game::initializeGame()
 		system("pause");
 		exit(0);
 	}
+	if (!Animation.Load("./Assets/Shaders/AnimateShader.vert", "./Assets/Shaders/PassThrough.frag"))
+	{
+		std::cout << "Shaders failed to initialize.\n";
+		system("pause");
+		exit(0);
+	}
 
 	//Objects
+	Knight.MaxFrames = 1;
 	if (!Knight.LoadFromFile("./Assets/Models/Knight.obj"))
 	{
 		std::cout << "Model failed to load\n";
 		system("pause");
 		exit(0);
 	}
+	Stage.MaxFrames = 1;
 	if (!Stage.LoadFromFile("./Assets/Models/Stage.obj"))
 	{
 		std::cout << "Model failed to load\n";
 		system("pause");
 		exit(0);
 	}
+	Demon.MaxFrames = 1;
 	if (!Demon.LoadFromFile("./Assets/Models/Demon.obj"))
 	{
 		std::cout << "Model failed to load\n";
 		system("pause");
 		exit(0);
 	}
+	Hitbox.MaxFrames = 1;
 	if (!Hitbox.LoadFromFile("./Assets/Models/hitbox.obj"))
+	{
+		std::cout << "Model failed to load\n";
+		system("pause");
+		exit(0);
+	}
+
+	AnimTest.MaxFrames = 4;
+	if (!AnimTest.LoadFromFile("./Assets/Models/Demon_TestAnimFrame1.obj"))
+	{
+		std::cout << "Model failed to load\n";
+		system("pause");
+		exit(0);
+	}
+	if (!AnimTest.LoadFromFile("./Assets/Models/Demon_TestAnimFrame2.obj"))
+	{
+		std::cout << "Model failed to load\n";
+		system("pause");
+		exit(0);
+	}
+	if (!AnimTest.LoadFromFile("./Assets/Models/Demon_TestAnimFrame3.obj"))
+	{
+		std::cout << "Model failed to load\n";
+		system("pause");
+		exit(0);
+	}
+	if (!AnimTest.LoadFromFile("./Assets/Models/Demon_TestAnimFrame4.obj"))
 	{
 		std::cout << "Model failed to load\n";
 		system("pause");
@@ -135,7 +176,6 @@ void Game::update()
 	}
 	else if (L == false) {
 		HitBoxTransform.SetTranslation(vec3(-999.9f, -999.9f, 0.0f));
-
 	}
 
 	//Jump
@@ -159,47 +199,62 @@ void Game::draw()
 	PassThrough.SendUniformMat4("uProj", CameraProjection.data, true);
 
 	//lighting
-	PassThrough.SendUniform("uTex", 0);
-	PassThrough.SendUniform("LightPosition", CameraTransform.GetInverse() * vec4(4.0f, 0.0f, 0.0f, 1.0f));
-	PassThrough.SendUniform("LightAmbient", vec3(0.5f, 0.5f, 0.5f));
-	PassThrough.SendUniform("LightDiffuse", vec3(0.7f, 0.7f, 0.7f));
-	PassThrough.SendUniform("LightSpecular", vec3(0.7f, 0.7f, 0.7f));
-	PassThrough.SendUniform("LightSpecularExponent", 50.0f);
-	PassThrough.SendUniform("Attenuation_Constant", 1.0f);
-	PassThrough.SendUniform("Attenuation_Linear", 0.1f);
-	PassThrough.SendUniform("Attenuation_Quadratic", 0.01f);
+	PassThrough.SendUniform("LightPosition", CameraTransform.GetInverse() * vec4(4.0f, 3.0f, 0.0f, 1.0f));
 
 
 	Grey.Bind();
-	glBindVertexArray(Stage.VAO);
-	glDrawArrays(GL_TRIANGLES, 0, Stage.GetNumVertices());
-	glBindVertexArray(0);
+	Stage.bind();
+	Stage.draw();
+	Stage.unbind();
 	Grey.Unbind();
 
 
 	PassThrough.SendUniformMat4("uModel", KnightTransform.data, true);
 	Blue.Bind();
-	glBindVertexArray(Knight.VAO);
-	glDrawArrays(GL_TRIANGLES, 0, Knight.GetNumVertices());
-	glBindVertexArray(0);
+	Knight.bind();
+	Knight.draw();
+	Knight.unbind();
 	Blue.Unbind();
 
 
 	PassThrough.SendUniformMat4("uModel", DemonTransform.data, true);
 	Red.Bind();
-	glBindVertexArray(Demon.VAO);
-	glDrawArrays(GL_TRIANGLES, 0, Demon.GetNumVertices());
-	glBindVertexArray(0);
+	Demon.bind();
+	Demon.draw();
+	Demon.unbind();
 	Red.Unbind();
 
 	PassThrough.SendUniformMat4("uModel", HitBoxTransform.data, true);
 	Red.Bind();
-	glBindVertexArray(Hitbox.VAO);
-	glDrawArrays(GL_TRIANGLES, 0, Demon.GetNumVertices());
-	glBindVertexArray(0);
+	Hitbox.bind();
+	Hitbox.draw();
+	Hitbox.unbind();
 	Red.Unbind();
 
 	PassThrough.unBind();
+
+	interp += updateTimer->getElapsedTimeSeconds();
+	if (interp > 1.0f)
+	{
+		interp = 0.0f;
+		index++;
+		if (index == 4)
+			index = 0;
+	}
+
+	Animation.Bind();
+	Animation.SendUniformMat4("uModel", AnimTestTransform.data, true);
+	Animation.SendUniformMat4("uView", CameraTransform.GetInverse().data, true);
+	Animation.SendUniformMat4("uProj", CameraProjection.data, true);
+	Animation.SendUniform("T", interp);
+	Animation.SendUniform("index", index);
+	Animation.SendUniform("LightPosition", CameraTransform.GetInverse() * vec4(4.0f, 0.0f, 0.0f, 1.0f));
+
+	AnimTest.bind();
+	AnimTest.draw();
+	AnimTest.unbind();
+
+	Animation.unBind();
 
 	glutSwapBuffers();
 }

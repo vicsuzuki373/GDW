@@ -6,9 +6,10 @@
 class Transform
 {
 public:
-	float m_pScale;
-
-	float m_pRotX, m_pRotY, m_pRotZ; // local rotation angles
+	float m_pScale = 1.0f;
+	float m_pRotX = 0.0f;
+	float m_pRotY = 0.0f;
+	float m_pRotZ = 0.0f; // local rotation angles
 
 	vec3 m_pLocalPosition;
 
