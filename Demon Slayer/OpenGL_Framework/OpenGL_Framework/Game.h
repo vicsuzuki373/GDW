@@ -39,11 +39,14 @@ public:
 	Timer *updateTimer	= nullptr;
 	float TotalGameTime = 0.0f;
 
+
 	Mesh Knight;
 	Mesh Stage;
 	Mesh Demon;
 	Mesh Hitbox;
 	Mesh Rubble;
+	bool isColliding = false;
+	bool KnightHurt = false;
 
 	Mesh AnimTest;
 
@@ -61,6 +64,9 @@ public:
 	mat4 StageTransform;
 	mat4 HitBoxTransform;
 	mat4 AnimTestTransform;
+
+
+	//Hitbox
 
 	/* Movement */
 	float MoveKnightX = 0.0f;

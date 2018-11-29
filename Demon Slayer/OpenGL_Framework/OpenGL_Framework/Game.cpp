@@ -126,13 +126,13 @@ void Game::initializeGame()
 	CameraProjection = mat4::PerspectiveProjection(60.0f, (float)WINDOW_WIDTH / (float)WINDOW_HEIGHT, 1.0f, 10000.0f);
 
 	StageTransform.Translate(vec3(0.0f, 0.0f, -15.0f));
-
 	KnightTransform.RotateY(80.0f);
 	KnightTransform.Translate(vec3(-7.5f, 0.0f, 0.0f));
 
 	DemonTransform.RotateY(-80.0f);
 	DemonTransform.Translate(vec3(10.0f, 0.0f, 0.0f));
 
+	AnimTestTransform.Translate(vec3(0.0f, 0.0f, -4.0f));
 	HitBoxTransform.Translate(vec3(-999.9f, -999.9f, 0));
 }
 
@@ -148,7 +148,8 @@ void Game::update()
 	MoveKnightY -= 0.05f;
 	if (KnightTransform.GetTranslation().y < 0.0f)
 	{
-			MoveKnightY = 0.0f;
+		MoveKnightY = 0.0f;
+		KnightTransform.SetTranslation(vec3(KnightTransform.GetTranslation().x, 0.0f, 0.0f));
 	}
 
 	//Move Left
@@ -180,8 +181,24 @@ void Game::update()
 
 	//Jump
 	if (Space && MoveKnightY == 0.0f)
-		MoveKnightY = 0.6f;
+		MoveKnightY = 0.8f;
 
+	if (HitBoxTransform.GetTranslation().x+1.0f>=DemonTransform.GetTranslation().x-1.0f&&HitBoxTransform.GetTranslation().x - 1.0f <= DemonTransform.GetTranslation().x + 1.0f) {
+		isColliding = true;
+	}
+	else {
+		isColliding = false;
+	}
+
+	if (KnightTransform.GetTranslation().x + 1.0f >= DemonTransform.GetTranslation().x - 0.5f&&KnightTransform.GetTranslation().x - 1.0f <= DemonTransform.GetTranslation().x + 0.5f) {
+		MoveKnightX = -0.7f;
+		MoveKnightY = 0.7f;
+		KnightHurt = true;
+	}
+	else {
+		KnightHurt = false;
+	}
+	
 
 
 	KnightTransform.Translate(vec3(MoveKnightX, MoveKnightY, 0.0f));
@@ -210,7 +227,17 @@ void Game::draw()
 
 
 	PassThrough.SendUniformMat4("uModel", KnightTransform.data, true);
-	Blue.Bind();
+	if (KnightHurt == true) {
+		Grey.Bind();
+		if (KnightTransform.GetTranslation().y <= 0.0f)
+		{
+			MoveKnightY = 0.0f;
+		}
+	}
+	else
+	{
+		Blue.Bind();
+	}
 	Knight.bind();
 	Knight.draw();
 	Knight.unbind();
@@ -218,11 +245,17 @@ void Game::draw()
 
 
 	PassThrough.SendUniformMat4("uModel", DemonTransform.data, true);
-	Red.Bind();
+	if (isColliding == true) {
+		Blue.Bind();
+	}
+	else {
+		Red.Bind();
+	}
 	Demon.bind();
 	Demon.draw();
 	Demon.unbind();
 	Red.Unbind();
+	Blue.Bind();
 
 	PassThrough.SendUniformMat4("uModel", HitBoxTransform.data, true);
 	Red.Bind();
@@ -278,7 +311,7 @@ void Game::keyboardDown(unsigned char key, int mouseX, int mouseY)
 
 	if (key == ' ') //Space bar
 		Space = true;
-	if (key == 'l' || key == 'L')
+	if (key == '0' || key == '0')
 		L = true;
 
 }
