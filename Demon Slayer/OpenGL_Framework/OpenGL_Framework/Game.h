@@ -41,7 +41,6 @@ public:
 	bool DemonHurt = false;
 	bool KnightHurt = false;
 
-<<<<<<< HEAD
 	//UI
 	Mesh UIPaladinHelmet;
 	Texture UIPaladinHelmetTex;
@@ -58,16 +57,6 @@ public:
 	Mesh UIDemonSkull;
 	Texture UIDemonSkullTex;
 	mat4 UIDemonSkullTransform;
-=======
-
-	Mesh Knight;
-	Mesh Stage;
-	Mesh Demon;
-	Mesh Hitbox;
-	Mesh Rubble;
-	bool isColliding = false;
-	bool KnightHurt = false;
->>>>>>> master
 
 	Mesh UIDemonBar;
 	mat4 UIDemonBarTransform;
@@ -137,9 +126,6 @@ public:
 	mat4 BannerTransform;
 	mat4 BannerBarTransform;
 	mat4 RubbleTransform;
-
-
-	//Hitbox
 
 
 	//Hitbox
