@@ -409,6 +409,7 @@ void Game::initializeGame()
 		exit(0);
 	}
 
+<<<<<<< HEAD
 	CameraTransform.Translate(vec3(0.0f, 6.5f, 25.0f));
 	CameraTransform.RotateX(-10.0f);
 	CameraProjection = mat4::PerspectiveProjection(60.0f, (float)WINDOW_WIDTH / (float)WINDOW_HEIGHT, 0.01f, 10000.0f);
@@ -416,9 +417,15 @@ void Game::initializeGame()
 	//Paladin
 	PaladinTransform.RotateY(80.0f);
 	PaladinTransform.Translate(vec3(-14.0f, 0.0f, 0.0f));
+=======
+	StageTransform.Translate(vec3(0.0f, 0.0f, -15.0f));
+	KnightTransform.RotateY(80.0f);
+	KnightTransform.Translate(vec3(-7.5f, 0.0f, 0.0f));
+>>>>>>> master
 
 	//Demon
 	DemonTransform.RotateY(-80.0f);
+<<<<<<< HEAD
 	DemonTransform.Translate(vec3(7.0f, 0.0f, 0.0f));
 
 	//Small and Big Objects
@@ -474,6 +481,12 @@ void Game::initializeGame()
 
 	UIDemonHealthTransform.Scale(3.5f);
 	UIDemonHealthTransform.Translate(vec3(21.5f, 14.85f, 10.1f));
+=======
+	DemonTransform.Translate(vec3(10.0f, 0.0f, 0.0f));
+
+	AnimTestTransform.Translate(vec3(0.0f, 0.0f, -4.0f));
+	HitBoxTransform.Translate(vec3(-999.9f, -999.9f, 0));
+>>>>>>> master
 }
 
 void Game::update()
@@ -489,7 +502,11 @@ void Game::update()
 	else
 	{
 		MoveKnightY = 0.0f;
+<<<<<<< HEAD
 		PaladinTransform.Translate(vec3(0.0f, PaladinTransform.GetTranslation().y * -1, 0.0f));
+=======
+		KnightTransform.SetTranslation(vec3(KnightTransform.GetTranslation().x, 0.0f, 0.0f));
+>>>>>>> master
 	}
 	//Move Left
 	if (A && MoveKnightX > -0.3f)
@@ -536,6 +553,7 @@ void Game::update()
 		DemonHurt = false;
 	}
 
+<<<<<<< HEAD
 	if (PaladinTransform.GetTranslation().x + 1.0f >= DemonTransform.GetTranslation().x - 4.5f &&
 		PaladinTransform.GetTranslation().x - 1.0f <= DemonTransform.GetTranslation().x + 0.5f)
 	{
@@ -549,7 +567,28 @@ void Game::update()
 			UIPaladinHealthTransform.Translate(vec3(-4.0f, 0.0f, 0.0f));
 		}
 	}
+=======
+	//Jump
+	if (Space && MoveKnightY == 0.0f)
+		MoveKnightY = 0.8f;
+>>>>>>> master
 
+	if (HitBoxTransform.GetTranslation().x+1.0f>=DemonTransform.GetTranslation().x-1.0f&&HitBoxTransform.GetTranslation().x - 1.0f <= DemonTransform.GetTranslation().x + 1.0f) {
+		isColliding = true;
+	}
+	else {
+		isColliding = false;
+	}
+
+	if (KnightTransform.GetTranslation().x + 1.0f >= DemonTransform.GetTranslation().x - 0.5f&&KnightTransform.GetTranslation().x - 1.0f <= DemonTransform.GetTranslation().x + 0.5f) {
+		MoveKnightX = -0.7f;
+		MoveKnightY = 0.7f;
+		KnightHurt = true;
+	}
+	else {
+		KnightHurt = false;
+	}
+	
 
 	if (DemonAttack)
 	{
@@ -601,6 +640,7 @@ void Game::draw()
 	Shader.SendUniform("LightPosition2", CameraTransform.GetInverse() * vec4(30.0f, 30.0f, -20.0f, 1.0f));
 
 
+<<<<<<< HEAD
 	//Objects
 	Shader.SendUniformMat4("uView", CameraTransform.GetInverse().data, true);
 	Shader.SendUniformMat4("uProj", CameraProjection.data, true);
@@ -799,10 +839,37 @@ void Game::draw()
 	}
 	else {
 		DemonTex.Bind();
+=======
+	PassThrough.SendUniformMat4("uModel", KnightTransform.data, true);
+	if (KnightHurt == true) {
+		Grey.Bind();
+		if (KnightTransform.GetTranslation().y <= 0.0f)
+		{
+			MoveKnightY = 0.0f;
+		}
+	}
+	else
+	{
+		Blue.Bind();
+	}
+	Knight.bind();
+	Knight.draw();
+	Knight.unbind();
+	Blue.Unbind();
+
+
+	PassThrough.SendUniformMat4("uModel", DemonTransform.data, true);
+	if (isColliding == true) {
+		Blue.Bind();
+	}
+	else {
+		Red.Bind();
+>>>>>>> master
 	}
 	Demon.bind();
 	Demon.draw();
 	Demon.unbind();
+<<<<<<< HEAD
 	DemonTex.Unbind();
 	RedTex.Bind();
 
@@ -884,6 +951,42 @@ void Game::draw()
 	CameraProjection = mat4::PerspectiveProjection(60.0f, (float)WINDOW_WIDTH / (float)WINDOW_HEIGHT, 0.01f, 10000.0f);
 
 	UIShader.unBind();
+=======
+	Red.Unbind();
+	Blue.Bind();
+
+	PassThrough.SendUniformMat4("uModel", HitBoxTransform.data, true);
+	Red.Bind();
+	Hitbox.bind();
+	Hitbox.draw();
+	Hitbox.unbind();
+	Red.Unbind();
+
+	PassThrough.unBind();
+
+	interp += updateTimer->getElapsedTimeSeconds();
+	if (interp > 1.0f)
+	{
+		interp = 0.0f;
+		index++;
+		if (index == 4)
+			index = 0;
+	}
+
+	Animation.Bind();
+	Animation.SendUniformMat4("uModel", AnimTestTransform.data, true);
+	Animation.SendUniformMat4("uView", CameraTransform.GetInverse().data, true);
+	Animation.SendUniformMat4("uProj", CameraProjection.data, true);
+	Animation.SendUniform("T", interp);
+	Animation.SendUniform("index", index);
+	Animation.SendUniform("LightPosition", CameraTransform.GetInverse() * vec4(4.0f, 0.0f, 0.0f, 1.0f));
+
+	AnimTest.bind();
+	AnimTest.draw();
+	AnimTest.unbind();
+
+	Animation.unBind();
+>>>>>>> master
 
 	glutSwapBuffers();
 }
@@ -907,6 +1010,11 @@ void Game::keyboardDown(unsigned char key, int mouseX, int mouseY)
 
 	if (key == ' ') //Space bar
 		Space = true;
+<<<<<<< HEAD
+=======
+	if (key == '0' || key == '0')
+		L = true;
+>>>>>>> master
 
 
 	switch (key) {
