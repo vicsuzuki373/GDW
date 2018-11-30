@@ -16,6 +16,7 @@ public:
 	bool Load(const std::string&vertFile, const std::string &fragFile);
 	bool IsLoaded() const;
 
+	bool reload();
 	// Clear all data from OpenGL
 	void UnLoad();
 	bool LinkProgram();
@@ -48,6 +49,9 @@ private:
 	GLuint _VertexShader = 0;
 	GLuint _FragShader = 0;
 	GLuint _Program = 0;
+
+	std::string vertexFilename;
+	std::string fragFilename;
 
 	std::string ReadFile(const std::string &fileName) const;
 	bool CompileShader(GLuint shader) const;

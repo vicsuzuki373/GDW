@@ -30,7 +30,8 @@ bool Texture::Load(const std::string &file)
 
 void Texture::Unload()
 {
-	if (TexObj != 0) {
+	if (TexObj != 0) 
+	{
 		//remove data from GPU
 		glDeleteTextures(1, &TexObj);
 		TexObj = 0;

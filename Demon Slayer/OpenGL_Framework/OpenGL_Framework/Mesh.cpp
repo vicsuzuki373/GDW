@@ -112,7 +112,7 @@ bool Mesh::LoadFromFile(const std::string &file)
 			// This line has Normal data
 			vec3 temp;
 
-			std::sscanf(inputString, "vn %f %f #f", &temp.x, &temp.y);
+			std::sscanf(inputString, "vn %f %f %f", &temp.x, &temp.y, &temp.z);
 			normalData.push_back(temp);
 		}
 		else if (std::strstr(inputString, "vt") != nullptr)
@@ -188,6 +188,12 @@ bool Mesh::LoadFromFile(const std::string &file)
 
 	// Cleanup
 
+	Frame++;
+	if (Frame == MaxFrames) {
+		glBindBuffer(GL_ARRAY_BUFFER, 0);
+		glBindVertexArray(0);
+	}
+
 	vertexData.clear();
 	textureData.clear();
 	normalData.clear();
@@ -195,12 +201,6 @@ bool Mesh::LoadFromFile(const std::string &file)
 	unPackedVertexData.clear();
 	unPackedTextureData.clear();
 	unPackedNormalData.clear();
-
-	Frame++;
-	if (Frame == MaxFrames) {
-		glBindBuffer(GL_ARRAY_BUFFER, 0);
-		glBindVertexArray(0);
-	}
 
 	return true;
 }

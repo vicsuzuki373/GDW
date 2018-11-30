@@ -68,7 +68,16 @@
     <None Include="Assets\Shaders\PassThrough.vert">
       <Filter>Resource Files</Filter>
     </None>
-    <None Include="Assets\Shaders\AnimateShader.vert">
+    <None Include="Assets\Shaders\UI.frag">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="Assets\Shaders\UI.vert">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="Assets\Shaders\Animation.vert">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="Assets\Shaders\PaladinJump.vert">
       <Filter>Resource Files</Filter>
     </None>
   </ItemGroup>

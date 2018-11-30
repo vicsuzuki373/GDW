@@ -1,17 +1,26 @@
 #version 420
 
 uniform vec4 LightPosition;
+uniform vec4 LightPosition2;
 
 //color
-uniform vec3 LightAmbient = vec3(0.5f, 0.5f, 0.5f);
-uniform vec3 LightDiffuse = vec3(0.7f, 0.7f, 0.7f);
-uniform vec3 LightSpecular = vec3(0.7f, 0.7f, 0.7f);
+uniform vec3 LightAmbient = vec3(0.25f, 0.21f, 0.25f);
+uniform vec3 LightDiffuse = vec3(0.5f, 0.3f, 0.0f);
+uniform vec3 LightSpecular = vec3(0.5f, 0.3f, 0.0f);
+
+uniform vec3 LightDiffuse2 = vec3(1.0f, 1.0f, 1.0f);
+uniform vec3 LightSpecular2 = vec3(1.0f, 1.0f, 1.0f);
 
 //scalars
 uniform float LightSpecularExponent = 50.0f;
 uniform float Attenuation_Constant = 1.0f;
 uniform float Attenuation_Linear = 0.1f;
-uniform float Attenuation_Quadratic = 0.01f;
+uniform float Attenuation_Quadratic = 0.1f;
+
+uniform float LightSpecularExponent2 = 100.0f;
+uniform float Attenuation_Constant2 = 1.0f;
+uniform float Attenuation_Linear2 = 0.03f;
+uniform float Attenuation_Quadratic2 = 0.003f;
 
 uniform sampler2D uTex;
 
@@ -51,8 +60,21 @@ void main()
 		outColor.rgb += LightSpecular * pow(NdotHV, LightSpecularExponent) * attenuation;
 	}
 
+	vec3 lightVec2 = LightPosition2.xyz - pos;
+	float dist2 = length(lightVec2);
+	vec3 lightDir2 = lightVec2 / dist2;
+	float NdotL2 = dot(normal, lightDir2);
+
+	if(NdotL2 > 0.0)
+	{
+		float attenuation2 = 1.0 / (Attenuation_Constant2 + (Attenuation_Linear2 * dist2) + (Attenuation_Quadratic2 * dist2 * dist2));
+		outColor.rgb += LightDiffuse2 * NdotL2 * attenuation2;
+		float NdotHV2 = max(dot(normal, normalize(lightDir2 + normalize(-pos))), 0.0);
+		outColor.rgb += LightSpecular2 * pow(NdotHV2, LightSpecularExponent2) * attenuation2;
+	}
+
 	vec4 textureColor = texture(uTex, texcoord);
 	outColor.rgb *= textureColor.rgb;
-	outColor.a *= textureColor.a;
+	outColor.a = textureColor.a;
 
 }

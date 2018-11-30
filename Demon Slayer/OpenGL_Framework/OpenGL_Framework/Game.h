@@ -38,38 +38,107 @@ public:
 	/* Data Members */
 	Timer *updateTimer	= nullptr;
 	float TotalGameTime = 0.0f;
+	bool DemonHurt = false;
+	bool KnightHurt = false;
 
-	Mesh Knight;
-	Mesh Stage;
+	//UI
+	Mesh UIPaladinHelmet;
+	Texture UIPaladinHelmetTex;
+	mat4 UIPaladinHelmetTransform;
+
+	Mesh UIPaladinBar;
+	mat4 UIPaladinBarTransform;
+
+	Mesh UIPaladinHealth;
+	mat4 UIPaladinHealthTransform;
+
+	Texture UIPaladinHealthBarTex;
+
+	Mesh UIDemonSkull;
+	Texture UIDemonSkullTex;
+	mat4 UIDemonSkullTransform;
+
+	Mesh UIDemonBar;
+	mat4 UIDemonBarTransform;
+
+	Mesh UIDemonHealth;
+	mat4 UIDemonHealthTransform;
+
+	Texture UIDemonHealthBarTex;
+
+	ShaderProgram Shader;
+	ShaderProgram AnimationShader;
+	ShaderProgram UIShader;
+
+	Mesh Paladin;
 	Mesh Demon;
-	Mesh Hitbox;
+	Mesh SmallObjects;
+	Mesh BigObjects;
+	Mesh Fire;
+	Mesh Tree;
+	Mesh Building;
+	Mesh Wall;
+	Mesh Grass;
+	Mesh Pew;
+	Mesh Candle;
+	Mesh Skull;
+	Mesh Torch;
+	Mesh Altar;
+	Mesh Banner;
+	Mesh BannerBar;
 	Mesh Rubble;
 
-	Mesh AnimTest;
-
-	ShaderProgram PassThrough;
-	ShaderProgram Animation;
-
-	Texture Grey;
-	Texture Blue;
-	Texture Red;
+	Texture RedTex;
+	Texture PaladinTex;
+	Texture DemonTex;
+	Texture SmallObjTex;
+	Texture BigObjTex;
+	Texture FireTex;
+	Texture TreeTex;
+	Texture BuildingTex;
+	Texture WallTex;
+	Texture GrassTex;
+	Texture PewTex;
+	Texture CandleTex;
+	Texture SkullTex;
+	Texture TorchTex;
+	Texture AltarTex;
+	Texture BannerTex;
+	Texture BannerBarTex;
+	Texture RubbleTex;
 
 	mat4 CameraTransform;
 	mat4 CameraProjection;
-	mat4 KnightTransform;
+	mat4 PaladinTransform;
 	mat4 DemonTransform;
-	mat4 StageTransform;
-	mat4 HitBoxTransform;
-	mat4 AnimTestTransform;
+	mat4 SmallObjectsTransform;
+	mat4 BigObjectsTransform;
+	mat4 FireTransform;
+	mat4 TreeTransform;
+	mat4 BuildingTransform;
+	mat4 WallTransform;
+	mat4 GrassTransform;
+	mat4 PewTransform;
+	mat4 CandleTransform;
+	mat4 SkullTransform;
+	mat4 TorchTransform;
+	mat4 AltarTransform;
+	mat4 BannerTransform;
+	mat4 BannerBarTransform;
+	mat4 RubbleTransform;
+
+
+	//Hitbox
 
 	/* Movement */
 	float MoveKnightX = 0.0f;
 	float MoveKnightY= 0.0f;
 
-
-	
-	int index = 0;
-	float interp = 0.0f;
+	bool DemonAttack;
+	int FireNumber = 0;
+	float FireInterp = 0.0f;
+	int DemonAttackNumber = 0;
+	float DemonInterp = 0.0f;
 
 
 	//Keys
@@ -77,9 +146,8 @@ public:
 	bool S = false;
 	bool D = false;
 	bool W = false;
-	bool L = false;
 	bool Space = false;
-	bool isOnGround;
+	bool isOnGround = true;
 
 private:
 	unsigned int VBO1 = GL_NONE;

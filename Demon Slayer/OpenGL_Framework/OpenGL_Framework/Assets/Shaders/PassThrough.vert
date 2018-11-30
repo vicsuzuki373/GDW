@@ -14,11 +14,10 @@ out vec3 pos;
 
 void main()
 {
-	texcoord = in_uv;
+	texcoord = vec2(in_uv.x, in_uv.y * -1);
 	norm = mat3(uView) * mat3(uModel) * in_normal;
 
 	vec4 viewSpace = uView * uModel * vec4(in_vert, 1.0f);
-
 
 	gl_Position = uProj * viewSpace;
 
