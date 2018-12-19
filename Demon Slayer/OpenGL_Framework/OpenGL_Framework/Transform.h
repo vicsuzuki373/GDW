@@ -1,7 +1,7 @@
 #pragma once
 
-#include <MiniMath/Core.h>
 #include <string>
+#include "Matrix.h"
 
 class Transform
 {

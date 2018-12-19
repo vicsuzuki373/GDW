@@ -271,7 +271,6 @@ void Game::initializeGame()
 		system("pause");
 		exit(0);
 	}
-
 	//Textures
 	if (!RedTex.Load("./Assets/Textures/Red.png"))
 	{

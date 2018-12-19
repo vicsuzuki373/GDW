@@ -1,5 +1,6 @@
 #pragma once
 #include "Transform.h"
+#include "Matrix.h"
 
 enum ProjectionType
 {

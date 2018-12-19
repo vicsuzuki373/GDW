@@ -2,7 +2,7 @@
 
 #include "GL\glew.h"
 
-#include <MiniMath\Core.h>
+#include "Vector.h"
 #include <string>
 #include <vector>
 
